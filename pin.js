@@ -22,10 +22,10 @@ $.fn.pin = function (options, fixed) {
             // 基准元素的偏移量
             offsetLeft, offsetTop,
 
-            // 基准元素根据定位点坐标 `baseXY` 分别获得纵横两个方向上的 size
+            // 基准元素根据其自身坐标分别获取距离自身纵横两个方向上的大小
             baseX, baseY,
 
-            // 同上，根据定位点坐标 `selfXY` 获取的横纵两个方向上的 size
+            // 定位元素根据自身坐标分别获取距离自身横纵两个方向上的大小
             selfX, selfY,
 
             // 定位元素位置
@@ -45,9 +45,6 @@ $.fn.pin = function (options, fixed) {
              * @return {number}
              */
             getSize = function (object, coord, type) {
-                // 参考 `https://github.com/aralejs/position/blob/master/src/position.js`
-                // 中的 `xyConverter` 方法
-                // 先将坐标值转成字符串
                 var x = coord + '';
 
                 // 处理 alias，此处正则表达式内的 `:?` 表示此括号为非捕获型括号
@@ -64,7 +61,7 @@ $.fn.pin = function (options, fixed) {
 
                 // 将百分比转为像素值
                 if (x.indexOf('%') !== -1) {
-                    // 支持小数
+                    // 支持小数,正则里有括号（(:?这种除外）的话d返回匹配后的值，如果没括号返回匹配值的出现位置
                     x = x.replace(/(\d+(?:\.\d+)?)%/gi, function (m, d) {
                         return object[type]() * (d / 100.0);
                     });
